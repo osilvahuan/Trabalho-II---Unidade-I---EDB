@@ -60,7 +60,7 @@ int main() {
         return 1;
     }
 
-    strand(time(NULL));
+    srand(time(NULL));
     for (int i = 0; i < n; i++) {
         vetor[i] = rand() % 10000; // Números aleatórios
     }
@@ -69,9 +69,39 @@ int main() {
 
     free(vetor); // Liberar memória alocada
 
-     // Testar os algoritmos
+    clock_t inicio, fim;
+    double tempo_total = 0;
+    int repeticoes = 30;
 
+    int tamanhos[] = {1000, 5000, 10000, 20000, 50000};
+    int num_testes = 5;
 
+    printf("n;tempo_medio\n");
+
+    for (int t = 0; t < num_testes; t++) {
+        int n = tamanhos[t];
+        tempo_total = 0;
+
+        for (int r = 0; r < repeticoes; r++) {
+
+            // Cria e preenche o vetor
+            int *vetor = (int *) malloc(n * sizeof(int));
+            for (int i = 0; i < n; i++) vetor[i] = rand();
+
+            // Mede apenas o algoritimo
+            inicio = clock();
+            bubbleSort(vetor, n);
+            fim = clock();
+
+            // Somar o tempo gasto (em segundos)
+            tempo_total += ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+
+            free(vetor); // Liberar memória alocada
+        }
+
+        // Imprime o tempo médio
+        printf("%d;%.6f\n", n, tempo_total / repeticoes);
+    }
 
 
     return 0;
